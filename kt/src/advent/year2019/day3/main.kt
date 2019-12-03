@@ -20,16 +20,6 @@ data class V2i(val x: Int, val y: Int) {
     }
 }
 
-typealias V2i2 = Pair<Int, Int>
-
-val V2i2.x
-    get() = first
-
-val V2i2.y
-    get() = second
-
-fun V2i2.plus(x: Int, y: Int) = V2i2(x + this.x, y + this.y)
-
 object LetterToDirection {
     private val map: HashMap<Char, V2i> = HashMap()
 
