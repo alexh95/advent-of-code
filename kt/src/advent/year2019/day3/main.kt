@@ -52,7 +52,23 @@ fun closestIntersection(wire1: List<V2i>, wire2: List<V2i>): Int {
     return wire1.intersect(wire2).map { abs(it.x) + abs(it.y) }.min()!!
 }
 
+fun minSteps(wire1: List<V2i>, wire2: List<V2i>): Int {
+    var minSteps: Int = -1
+    wire1.forEachIndexed { index1, element ->
+        val index2: Int = wire2.indexOf(element)
+        if (index2 > -1) {
+            val steps: Int = index1 + index2 + 2
+            if (steps < minSteps || minSteps == -1) {
+                minSteps = steps
+            }
+        }
+    }
+    return minSteps
+}
+
 fun main() {
     val wires = File("src/advent/year2019/day3/input.txt").readLines().map { lineToPositions(it) }
-    File("src/advent/year2019/day3/output.txt").writeText(closestIntersection(wires[0], wires[1]).toString() + "\n")
+    val minIntersectionDistance: Int = closestIntersection(wires[0], wires[1])
+    val minIntersectionSteps: Int = minSteps(wires[0], wires[1])
+    File("src/advent/year2019/day3/output.txt").writeText("$minIntersectionDistance\n$minIntersectionSteps\n")
 }
