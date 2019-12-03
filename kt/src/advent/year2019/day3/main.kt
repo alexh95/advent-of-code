@@ -3,13 +3,13 @@ package advent.year2019.day3
 import java.io.File
 import kotlin.math.abs
 
-class V2i(val x: Int, val y: Int) {
+data class V2i(val x: Int, val y: Int) {
     constructor() : this(0, 0)
 
     operator fun plus(a: V2i) = V2i(x + a.x, y + a.y)
 
     override fun equals(other: Any?): Boolean {
-        val v = other as V2i
+        val v: V2i = other as V2i
         return x == v.x && y == v.y
     }
 
@@ -19,6 +19,16 @@ class V2i(val x: Int, val y: Int) {
         return result
     }
 }
+
+typealias V2i2 = Pair<Int, Int>
+
+val V2i2.x
+    get() = first
+
+val V2i2.y
+    get() = second
+
+fun V2i2.plus(x: Int, y: Int) = V2i2(x + this.x, y + this.y)
 
 object LetterToDirection {
     private val map: HashMap<Char, V2i> = HashMap()
@@ -52,18 +62,23 @@ fun closestIntersection(wire1: List<V2i>, wire2: List<V2i>): Int {
     return wire1.intersect(wire2).map { abs(it.x) + abs(it.y) }.min()!!
 }
 
-fun minSteps(wire1: List<V2i>, wire2: List<V2i>): Int {
-    var minSteps: Int = -1
-    wire1.forEachIndexed { index1, element ->
-        val index2: Int = wire2.indexOf(element)
-        if (index2 > -1) {
-            val steps: Int = index1 + index2 + 2
-            if (steps < minSteps || minSteps == -1) {
-                minSteps = steps
-            }
-        }
+class V2iIndexed(val index: Int, val position: V2i) {
+    override fun equals(other: Any?): Boolean {
+        val v: V2iIndexed = other as V2iIndexed
+        return position == v.position
     }
-    return minSteps
+
+    override fun hashCode(): Int {
+        return position.hashCode()
+    }
+}
+
+fun minSteps(wire1: List<V2i>, wire2: List<V2i>): Int {
+    return wire1
+            .mapIndexed { index: Int, element: V2i -> V2iIndexed(index, element)}
+            .intersect(wire2.mapIndexed { index: Int, element: V2i -> V2iIndexed(index, element)})
+            .map { it.index + wire2.indexOf(it.position) + 2 }
+            .min()!!
 }
 
 fun main() {
