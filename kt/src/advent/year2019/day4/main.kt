@@ -1,8 +1,10 @@
 package advent.year2019.day4
 
+fun List<Int>.isSorted() = zip(drop(1)).all { (a, b) -> a <= b}
+
 fun validPassword(n: Int): Boolean {
     val digits = n.toString().map { it.toInt() - 48 }
-    if (digits.take(digits.size - 1).mapIndexed { index, i -> i <= digits[index + 1] }.all { it }) {
+    if (digits.isSorted()) {
         val digitCount: IntArray = IntArray(10) { 0 }
         digits.forEach { ++digitCount[it] }
         return digitCount.any { it > 1 }
@@ -12,7 +14,7 @@ fun validPassword(n: Int): Boolean {
 
 fun validPasswordMinDouble(n: Int): Boolean {
     val digits = n.toString().map { it.toInt() - 48 }
-    if (digits.take(digits.size - 1).mapIndexed { index, i -> i <= digits[index + 1] }.all { it }) {
+    if (digits.isSorted()) {
         val digitCount: IntArray = IntArray(10) { 0 }
         digits.forEach { ++digitCount[it] }
         return digitCount.contains(2)
