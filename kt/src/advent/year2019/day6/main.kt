@@ -27,16 +27,42 @@ fun countOrbits(orbitMap: Map<String, List<String>>): Pair<Int, Int> {
     return countOrbitsRecursive(orbitMap, "COM")
 }
 
+fun countTransfers(reverseOrbitMap: Map<String, String>, srcObject: String, dstObject: String): Int {
+    val srcRoots: MutableList<String> = mutableListOf()
+    var srcRoot: String = srcObject
+    while (reverseOrbitMap.containsKey(srcRoot)) {
+        srcRoot = reverseOrbitMap[srcRoot]!!
+        srcRoots.add(srcRoot)
+    }
+    srcRoots.reverse()
+    val dstRoots: MutableList<String> = mutableListOf()
+    var dstRoot: String = dstObject
+    while (reverseOrbitMap.containsKey(dstRoot)) {
+        dstRoot = reverseOrbitMap[dstRoot]!!
+        dstRoots.add(dstRoot)
+    }
+    dstRoots.reverse()
+    var commonRootIndex: Int = 0
+    while (srcRoots[commonRootIndex + 1] == dstRoots[commonRootIndex + 1]) {
+        ++commonRootIndex
+    }
+    return srcRoots.size + dstRoots.size - 2 * (commonRootIndex + 1)
+}
+
 fun main() {
     val orbitMap: MutableMap<String, MutableList<String>> = mutableMapOf()
+    val reverseOrbitMap: MutableMap<String, String> = mutableMapOf()
     File("src/advent/year2019/day6/input.txt").readLines().map {
 //    File("src/advent/year2019/day6/test.txt").readLines().map {
+//    File("src/advent/year2019/day6/test2.txt").readLines().map {
         val objects = it.split(')')
         if (!orbitMap.containsKey(objects[0])) {
             orbitMap[objects[0]] = mutableListOf()
         }
         orbitMap[objects[0]]!!.add(objects[1])
+        reverseOrbitMap[objects[1]] = objects[0]
     }
     val orbits = countOrbits(orbitMap)
-    println("$orbits\n")
+    val minTransfers = countTransfers(reverseOrbitMap, "YOU", "SAN")
+    println("$orbits\n$minTransfers\n")
 }
