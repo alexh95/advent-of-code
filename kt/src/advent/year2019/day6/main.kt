@@ -42,10 +42,7 @@ fun countTransfers(reverseOrbitMap: Map<String, String>, srcObject: String, dstO
         dstRoots.add(dstRoot)
     }
     dstRoots.reverse()
-    var commonRootIndex: Int = 0
-    while (srcRoots[commonRootIndex + 1] == dstRoots[commonRootIndex + 1]) {
-        ++commonRootIndex
-    }
+    val commonRootIndex: Int = srcRoots.zip(dstRoots).indexOfLast { it.first == it.second }
     return srcRoots.size + dstRoots.size - 2 * (commonRootIndex + 1)
 }
 

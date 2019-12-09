@@ -40,7 +40,7 @@ fun lineToPositions(line: String): List<V2i> {
 
         val direction: V2i = LetterToDirection.fromLetter(it[0])!!
         val distance: Int = it.substring(1).toInt()
-        for (i in 0 until distance) {
+        (0 until distance).forEach { _ ->
             currentPosition += direction
             positions.add(currentPosition)
         }
