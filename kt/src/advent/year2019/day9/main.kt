@@ -51,48 +51,48 @@ class Program(programCode: LongArray) {
                 1L -> {
                     val value: Long = param1() + param2()
                     setParam3(value)
-                    instructionPointer += 4
+                    instructionPointer += 4L
                 }
                 2L -> {
                     val value: Long = param1() * param2()
                     setParam3(value)
-                    instructionPointer += 4
+                    instructionPointer += 4L
                 }
                 3L -> {
                     setParam1(input)
-                    instructionPointer += 2
+                    instructionPointer += 2L
                 }
                 4L -> {
                     result += param1()
-                    instructionPointer += 2
+                    instructionPointer += 2L
                 }
                 5L -> {
                     if (param1() != 0L) {
                         instructionPointer = param2()
                     } else {
-                        instructionPointer += 3
+                        instructionPointer += 3L
                     }
                 }
                 6L -> {
                     if (param1() == 0L) {
                         instructionPointer = param2()
                     } else {
-                        instructionPointer += 3
+                        instructionPointer += 3L
                     }
                 }
                 7L -> {
                     val value: Long = if (param1() < param2()) 1L else 0L
                     setParam3(value)
-                    instructionPointer += 4
+                    instructionPointer += 4L
                 }
                 8L -> {
                     val value: Long = if (param1() == param2()) 1L else 0L
                     setParam3(value)
-                    instructionPointer += 4
+                    instructionPointer += 4L
                 }
                 9L -> {
                     relativeBase += param1()
-                    instructionPointer += 2
+                    instructionPointer += 2L
                 }
                 99L -> {
                     notFinished = false
@@ -117,7 +117,9 @@ fun main() {
     val outputTest02 = Program(programCodeTest02)()
     assertEquals(1125899906842624L, outputTest02[0])
 
-    val programCodeMain0 = getProgramCodeFromFile("src/advent/year2019/day9/input.txt")
-    val outputMain0 = Program(programCodeMain0)(1)
+    val programCodeMain = getProgramCodeFromFile("src/advent/year2019/day9/input.txt")
+    val outputMain0 = Program(programCodeMain)(1)
     println(outputMain0.contentToString())
+    val outputMain1 = Program(programCodeMain)(2)
+    println(outputMain1.contentToString())
 }
