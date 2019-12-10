@@ -37,22 +37,7 @@ fun stationPositionAsteroids(asteroids: Asteroids): Pair<V2i, Int> = asteroids.m
 // left -> up: -PI .. -0.5 PI -> 1.5 PI .. 2 PI
 fun mapAngle(a: Double): Double = if (a >= -0.5 * PI && a <= PI) a + 0.5 * PI else a + 2.5 * PI
 
-fun destroyAsteroids(asteroids: Asteroids, stationPosition: V2i): List<V2i> {
-    val result: MutableList<V2i> = mutableListOf()
-    val asteroidAngleMap = asteroids.filterNot { it == stationPosition }.map { it - stationPosition }.map { Pair(it.minimize(), it) }.groupBy { it.first }.mapValues { it.value.map { p -> p.second }.sortedBy { v -> abs(v.x) + abs(v.y) }.toMutableList() }.toSortedMap(compareBy { mapAngle(atan2(it.y.toDouble(), it.x.toDouble())) })
-    while (asteroidAngleMap.isNotEmpty()) {
-        val toBeRemoved: MutableList<V2i> = mutableListOf()
-        asteroidAngleMap.forEach {
-            val pos = it.value.removeAt(0)
-            result += pos + stationPosition
-            if (it.value.isEmpty()) {
-                toBeRemoved += it.key
-            }
-        }
-        asteroidAngleMap -= toBeRemoved
-    }
-    return result
-}
+fun destroyAsteroids(asteroids: Asteroids, stationPosition: V2i): List<V2i> = asteroids.filterNot { it == stationPosition }.map { it - stationPosition }.map { Pair(it.minimize(), it) }.groupBy { it.first }.mapValues { it.value.map { p -> p.second }.sortedBy { v -> abs(v.x) + abs(v.y) } }.flatMap { it.value.mapIndexed { index, p -> Pair(it.key, Pair(index, p)) } }.sortedBy { it.second.first * 1000 + mapAngle(atan2(it.first.y.toDouble(), it.first.x.toDouble())) }.map { it.second.second + stationPosition }
 
 fun main() {
     val testInput00 = ".#..#\n" + ".....\n" + "#####\n" + "....#\n" + "...##"
