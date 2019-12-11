@@ -1,6 +1,8 @@
 package advent.year2019.day11
 
 import java.io.File
+import kotlin.math.max
+import kotlin.math.min
 
 fun getProgramCode(code: String): LongArray = code.split(',').map { it.toLong() }.toLongArray()
 
@@ -45,10 +47,10 @@ class Program(programCode: LongArray) {
         }
     }
 
-    operator fun invoke(): Int {
+    operator fun invoke(): Pair<Int, List<String>> {
         var position = V2i(0, 0)
         var direction = V2i(0, -1)
-        val paintedPanels: MutableMap<V2i, Long> = mutableMapOf()
+        val paintedPanels: MutableMap<V2i, Long> = mutableMapOf(Pair(position, 1L))
         var outputCount = 0
 
         var notFinished = true
@@ -125,12 +127,16 @@ class Program(programCode: LongArray) {
             }
         }
 
-        return paintedPanels.size
+        val paintedPanelCount = paintedPanels.size
+        val minPosition = paintedPanels.keys.reduce { acc, p -> V2i(min(acc.x, p.x), min(acc.y, p.y)) }
+        val maxPosition = paintedPanels.keys.reduce { acc, p -> V2i(max(acc.x, p.x), max(acc.y, p.y)) }
+        val hull = (minPosition.y..maxPosition.y).map { y -> (minPosition.x..maxPosition.x).map { x -> paintedPanels[V2i(x, y)] ?: 0L }.map { if (it == 0L) '.' else '#' }.joinToString("") { it.toString() } }
+        return Pair(paintedPanelCount, hull)
     }
 }
 
 fun main() {
     val programCodeMain = getProgramCodeFromFile("src/advent/year2019/day11/input.txt")
     val outputMain = Program(programCodeMain)()
-    println(outputMain)
+    println("${outputMain.first}\n${outputMain.second.joinToString("\n")}\n")
 }
