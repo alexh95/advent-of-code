@@ -7,6 +7,7 @@ import kotlin.test.assertEquals
 data class V3i(val x: Int, val y: Int, val z: Int) {
     constructor(array: IntArray) : this(array[0], array[1], array[2])
     constructor() : this(0, 0, 0)
+
     operator fun plus(v: V3i): V3i = V3i(x + v.x, y + v.y, z + v.z)
     fun absum(): Int = abs(x) + abs(y) + abs(z)
     override fun toString(): String = "<x=$x, y=$y, z=$z>"
@@ -16,11 +17,13 @@ fun List<V3i>.sum(): V3i = reduceRight { v, acc -> v + acc }
 
 data class Moon(val p: V3i, val dp: V3i) {
     constructor(p: V3i) : this(p, V3i())
+
     fun update(moons: List<Moon>): Moon {
         val newDP = dp + moons.map { m -> V3i(sign(m.p.x - p.x), sign(m.p.y - p.y), sign(m.p.z - p.z)) }.sum()
         val newP = p + newDP
         return Moon(newP, newDP)
     }
+
     override fun toString(): String = "p=$p, dp=$dp"
 }
 
@@ -30,10 +33,7 @@ fun getMoons(input: List<String>): List<Moon> = input.map { V3i(it.substring(1, 
 
 fun totalEnergy(input: List<String>, steps: Int): Int {
     var moons = getMoons(input)
-    repeat(steps) {
-        moons = moons.map { it.update(moons) }
-//        println("After step ${it + 1}:\n${moons.joinToString("\n")}")
-    }
+    repeat(steps) { moons = moons.map { it.update(moons) } }
     return moons.map { it.p.absum() * it.dp.absum() }.sum()
 }
 
@@ -49,27 +49,19 @@ fun minStepsToPrevious(input: List<String>): Long {
     var xPeriod = -1L
     var yPeriod = -1L
     var zPeriod = -1L
-    var step: Long = 0L
-    var notFinished = true
-    while (notFinished) {
+    var step = 0L
+    while (xPeriod == -1L || yPeriod == -1L || zPeriod == -1L) {
         moons = moons.map { it.update(moons) }
         ++step
-        val xValues = moons.map { listOf(it.p.x, it.dp.x) }
-        val yValues = moons.map { listOf(it.p.y, it.dp.y) }
-        val zValues = moons.map { listOf(it.p.z, it.dp.z) }
 
-        if (xPeriod == -1L && initialXValues == xValues) {
+        if (xPeriod == -1L && initialXValues == moons.map { listOf(it.p.x, it.dp.x) }) {
             xPeriod = step
         }
-        if (yPeriod == -1L && initialYValues == yValues) {
+        if (yPeriod == -1L && initialYValues == moons.map { listOf(it.p.y, it.dp.y) }) {
             yPeriod = step
         }
-        if (zPeriod == -1L && initialZValues == zValues) {
+        if (zPeriod == -1L && initialZValues == moons.map { listOf(it.p.z, it.dp.z) }) {
             zPeriod = step
-        }
-
-        if (xPeriod > -1L && yPeriod > -1L && zPeriod > -1L) {
-            notFinished = false
         }
     }
     return lcm(xPeriod, lcm(yPeriod, zPeriod))
