@@ -1,22 +1,12 @@
 package advent.year2019.day13
 
 import java.io.File
-import kotlin.math.max
-import kotlin.math.min
 
 fun getProgramCode(code: String): LongArray = code.split(',').map { it.toLong() }.toLongArray()
 
 fun getProgramCodeFromFile(path: String): LongArray = getProgramCode(File(path).readText().trim())
 
-class V2i(val x: Int, val y: Int) {
-    operator fun plus(a: V2i): V2i = V2i(x + a.x, y + a.y)
-    operator fun minus(a: V2i): V2i = V2i(x - a.x, y - a.y)
-    operator fun div(n: Int): V2i = V2i(x / n, y / n)
-    fun turnLeft90(): V2i = V2i(y, -x)
-    fun turnRight90(): V2i = V2i(-y, x)
-    override fun equals(other: Any?): Boolean = x == (other as V2i).x && y == other.y
-    override fun hashCode(): Int = x * 31 + y * 7
-}
+fun sign(n: Int): Long = if (n > 0) 1L else if (n == 0) 0L else -1L
 
 class Instruction(instruction: Long) {
     val opcode = instruction % 100
@@ -47,10 +37,19 @@ class Program(programCode: LongArray) {
         }
     }
 
-    operator fun invoke(): Int {
+    operator fun invoke(play: Boolean): Long {
         var outputCount = 0
-        var blockTileCount = 0
+        var blockTileCount = 0L
+        var lastX = 0L
+        var lastY = 0L
+        var lastScore = 0L
 
+        var paddleX = -1
+        var ballX = -1
+
+        if (play) {
+            program[0] = 2L
+        }
         var notFinished = true
         while (notFinished) {
             val instruction = Instruction(program[instructionPointer.toInt()])
@@ -70,15 +69,26 @@ class Program(programCode: LongArray) {
                     instructionPointer += 4L
                 }
                 3L -> {
-                    val input = 0L
+                    val input = sign(ballX - paddleX)
                     setParam1(input)
                     instructionPointer += 2L
                 }
                 4L -> {
                     val output = param1()
-                    if (outputCount == 2) {
-                        if (output == 2L) {
-                            ++blockTileCount
+                    when (outputCount) {
+                        0 -> lastX = output
+                        1 -> lastY = output
+                        2 -> {
+                            if (lastX == -1L && lastY == 0L) {
+                                lastScore = output
+                            } else {
+                                val x = lastX.toInt()
+                                when (output.toInt()) {
+                                    2 -> if (!play) ++blockTileCount
+                                    3 -> paddleX = x
+                                    4 -> ballX = x
+                                }
+                            }
                         }
                     }
                     if (++outputCount >= 3) {
@@ -120,12 +130,13 @@ class Program(programCode: LongArray) {
             }
         }
 
-        return blockTileCount
+        return if (play) lastScore else blockTileCount
     }
 }
 
 fun main() {
-    val programCodeMain = advent.year2019.day11.getProgramCodeFromFile("src/advent/year2019/day13/input.txt")
-    val outputMain = Program(programCodeMain)()
-    println("$outputMain\n")
+    val programCodeMain = getProgramCodeFromFile("src/advent/year2019/day13/input.txt")
+    val blockTileCount = Program(programCodeMain)(false)
+    val score = Program(programCodeMain)(true)
+    println("$blockTileCount\n$score\n")
 }
