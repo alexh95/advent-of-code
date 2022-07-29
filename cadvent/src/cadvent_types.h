@@ -30,6 +30,19 @@ struct buffer
 };
 typedef buffer string;
 
+inline u32 StringLength(char* String)
+{
+    u32 Size = 0;
+    if (String)
+    {
+        while (String[Size])
+        {
+            ++Size;
+        }
+    }
+    return Size;
+}
+
 #define Kilobytes(Size) ((Size) * 1024LL)
 #define Megabytes(Size) (Kilobytes(Size) * 1024LL)
 #define Gigabytes(Size) (Gigabytes(Size) * 1024LL)
@@ -43,12 +56,38 @@ struct memory_arena
 
 #define ArenaPushStruct(Type, Arena) (Type*) ArenaPush(Arena, sizeof(Type))
 #define ArenaPushArray(Type, Arena, Count) (Type*) ArenaPush(Arena, sizeof(Type) * Count)
+#define ArenaPushString(Arena, Arg) ArenaPushStringInternal(Arena, Arg)
 
 inline void* ArenaPush(memory_arena* Arena, umm Size)
 {
     Assert(Arena->Used + Size < Arena->Size);
     void* Result = Arena->Base + Arena->Used + Size;
     Arena->Used += Size;
+    return Result;
+}
+
+inline string ArenaPushStringInternal(memory_arena* Arena, u32 Count)
+{
+    string Result;
+    Result.Size = Count;
+    Result.Data = ArenaPushArray(u8, Arena, Count);
+    return Result;
+}
+
+inline string ArenaPushStringInternal(memory_arena* Arena, char* String)
+{
+    u32 Size = StringLength(String);
+    Assert(Arena->Used + Size < Arena->Size);
+    
+    string Result;
+    Result.Size = Size;
+    Result.Data = Arena->Base + Arena->Used;
+    for (u32 Index = 0; Index < Size; ++Index)
+    {
+        Result.Data[Index] = String[Index];
+    }
+    Arena->Used += Size;
+    
     return Result;
 }
 

@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include "cadvent_types.h"
-#include "solution.cpp"
+#include "cadvent_string.cpp"
+#include "cadvent_solution.cpp"
 
 PLATFORM_OPEN_AND_READ_FILE(WinOpenAndReadFile)
 {
