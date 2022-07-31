@@ -1,9 +1,11 @@
 #include "cadvent_solution.h"
 #include "cadvent_solution_2015_01.cpp"
+#include "cadvent_solution_2015_02.cpp"
 
 solver* Solvers[] =
 {
     SolveYear2015Day01,
+    SolveYear2015Day02
 };
 
 buffer ReadInputFile(cadvent_state* State, u32 Year, u32 Day)

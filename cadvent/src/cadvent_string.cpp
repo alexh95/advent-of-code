@@ -54,3 +54,19 @@ u32 StringFromI32(string String, u32 Offset, i32 Value)
 {
     return StringFromI32(String, Offset, Value, 0, false);
 }
+
+i32 StringToI32(string String)
+{
+    i32 Result = 0;
+    i32 Exponent = 1;
+    
+    for (i32 StringIndex = String.Size - 1; StringIndex >= 0; --StringIndex)
+    {
+        char Character = String.Data[StringIndex];
+        i32 ShiftedCharacter = (Character - 48) * Exponent;
+        Result += ShiftedCharacter;
+        Exponent *= 10;
+    }
+    
+    return Result;
+}

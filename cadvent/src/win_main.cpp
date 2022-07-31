@@ -1,5 +1,6 @@
 #include <Windows.h>
 #include "cadvent_types.h"
+#include "cadvent_math.h"
 #include "cadvent_string.cpp"
 #include "cadvent_solution.cpp"
 
@@ -49,7 +50,7 @@ int WinMain(HINSTANCE Instance, HINSTANCE PrevInstance, LPSTR CmdLine, int ShowC
     State.Platform.OpenAndReadFile = WinOpenAndReadFile;
     State.Platform.CreateAndWriteFile = WinCreateAndWriteFile;
     
-    Solve(&State, 2015, 1);
+    Solve(&State, 2015, 2);
     
     return 0;
 }

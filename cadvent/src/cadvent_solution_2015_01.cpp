@@ -1,4 +1,4 @@
-SOLVER(SolveYear2015Day01)
+SOLVER(2015, 01)
 {
     i32 Floor = 0;
     i32 BasementIndex = 0;
