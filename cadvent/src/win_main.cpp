@@ -50,7 +50,7 @@ int WinMain(HINSTANCE Instance, HINSTANCE PrevInstance, LPSTR CmdLine, int ShowC
     State.Platform.OpenAndReadFile = WinOpenAndReadFile;
     State.Platform.CreateAndWriteFile = WinCreateAndWriteFile;
     
-    Solve(&State, 2015, 2);
+    Solve(&State, 2015, 3);
     
     return 0;
 }

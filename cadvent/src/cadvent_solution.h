@@ -10,7 +10,9 @@ struct solution
     i32 SecondPart;
 };
 
-#define SOLVER(YEAR, DAY) solution SolveYear ## YEAR ## Day ## DAY(buffer InputBuffer)
+#define SOLVER_NAME(YEAR, DAY) SolveYear ## YEAR ## Day ## DAY
+
+#define SOLVER(Year, Day) solution SOLVER_NAME(Year, Day)(buffer InputBuffer)
 
 #define SOLVER_(Name) solution Name(buffer InputBuffer)
 typedef SOLVER_(solver);
