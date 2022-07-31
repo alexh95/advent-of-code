@@ -1,5 +1,24 @@
 SOLVER(SolveYear2015Day01)
 {
-    solution Solution = {};
+    i32 Floor = 0;
+    i32 BasementIndex = 0;
+    for (u32 Index = 0; Index < InputBuffer.Size; ++Index)
+    {
+        u8 Character = InputBuffer.Data[Index];
+        if (Character == '(')
+        {
+            ++Floor;
+        }
+        else if (Character == ')')
+        {
+            --Floor;
+        }
+        if (Floor == -1 && BasementIndex == 0)
+        {
+            BasementIndex = Index + 1;
+        }
+    }
+    
+    solution Solution = { Floor, BasementIndex };
     return Solution;
 }

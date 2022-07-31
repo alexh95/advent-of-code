@@ -6,11 +6,11 @@
 
 struct solution
 {
-    u32 FirstPart;
-    u32 SecondPart;
+    i32 FirstPart;
+    i32 SecondPart;
 };
 
-#define SOLVER(Name) solution Name(buffer Buffer)
+#define SOLVER(Name) solution Name(buffer InputBuffer)
 typedef SOLVER(solver);
 
 #endif
