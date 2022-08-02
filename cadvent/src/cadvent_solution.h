@@ -12,9 +12,9 @@ struct solution
 
 #define SOLVER_NAME(YEAR, DAY) SolveYear ## YEAR ## Day ## DAY
 
-#define SOLVER(Year, Day) solution SOLVER_NAME(Year, Day)(buffer InputBuffer)
+#define SOLVER(Year, Day) solution SOLVER_NAME(Year, Day)(memory_arena* Arena, buffer InputBuffer)
 
-#define SOLVER_(Name) solution Name(buffer InputBuffer)
+#define SOLVER_(Name) solution Name(memory_arena* Arena, buffer InputBuffer)
 typedef SOLVER_(solver);
 
 #endif

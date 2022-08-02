@@ -5,6 +5,16 @@ string String(u32 Size)
     return Result;
 }
 
+u32 StringCopy(string Dst, string Src)
+{
+    Assert(Dst.Size >= Src.Size);
+    for (u32 Index = 0; Index < Src.Size; ++Index)
+    {
+        Dst.Data[Index] = Src.Data[Index];
+    }
+    return Src.Size;
+}
+
 #define MAX_STRING_LENGTH_I32 11
 u32 StringFromI32(string String, u32 Offset, i32 Value, u32 MinLength, b32 LeadingZeros)
 {

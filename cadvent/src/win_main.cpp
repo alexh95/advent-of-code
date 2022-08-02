@@ -2,6 +2,7 @@
 #include "cadvent_types.h"
 #include "cadvent_math.h"
 #include "cadvent_string.cpp"
+#include "md5.cpp"
 #include "cadvent_solution.cpp"
 
 PLATFORM_OPEN_AND_READ_FILE(WinOpenAndReadFile)
@@ -50,7 +51,7 @@ int WinMain(HINSTANCE Instance, HINSTANCE PrevInstance, LPSTR CmdLine, int ShowC
     State.Platform.OpenAndReadFile = WinOpenAndReadFile;
     State.Platform.CreateAndWriteFile = WinCreateAndWriteFile;
     
-    Solve(&State, 2015, 3);
+    Solve(&State, 2015, 4);
     
     return 0;
 }

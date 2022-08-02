@@ -61,7 +61,7 @@ struct memory_arena
 inline void* ArenaPush(memory_arena* Arena, umm Size)
 {
     Assert(Arena->Used + Size < Arena->Size);
-    void* Result = Arena->Base + Arena->Used + Size;
+    void* Result = Arena->Base + Arena->Used;
     Arena->Used += Size;
     return Result;
 }

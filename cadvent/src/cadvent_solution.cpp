@@ -2,17 +2,19 @@
 #include "cadvent_solution_2015_01.cpp"
 #include "cadvent_solution_2015_02.cpp"
 #include "cadvent_solution_2015_03.cpp"
+#include "cadvent_solution_2015_04.cpp"
 
 solver* Solvers[] =
 {
-    SolveYear2015Day01, SolveYear2015Day02, SolveYear2015Day03,
+    SolveYear2015Day01, SolveYear2015Day02, SolveYear2015Day03, SolveYear2015Day04,
 };
 
 buffer ReadInputFile(cadvent_state* State, u32 Year, u32 Day)
 {
-    string InputFilePath = ArenaPushString(&State->Arena, "..\\data\\yearYYYY\\dayDD\\input.txt");
+    string InputFilePath = ArenaPushString(&State->Arena, "..\\data\\yearYYYY\\dayDD\\input.txt ");
     StringFromI32(InputFilePath, 12, Year);
     StringFromI32(InputFilePath, 20, Day, 2, true);
+    InputFilePath.Data[InputFilePath.Size - 1] = 0;
     
     buffer Result = State->Platform.OpenAndReadFile((char*)InputFilePath.Data);
     return Result;
@@ -30,9 +32,10 @@ solver* GetSolver(cadvent_state* State, u32 Year, u32 Day)
 
 void WriteOutputFile(cadvent_state* State, u32 Year, u32 Day, solution Solution)
 {
-    string OutputFilePath = ArenaPushString(&State->Arena, "..\\data\\yearYYYY\\dayDD\\output.txt");
+    string OutputFilePath = ArenaPushString(&State->Arena, "..\\data\\yearYYYY\\dayDD\\output.txt ");
     StringFromI32(OutputFilePath, 12, Year);
     StringFromI32(OutputFilePath, 20, Day, 2, true);
+    OutputFilePath.Data[OutputFilePath.Size - 1] = 0;
     
     string SolutionString = ArenaPushString(&State->Arena, 50);
     u32 SolutionIndex = StringFromI32(SolutionString, 0, Solution.FirstPart);
@@ -46,6 +49,6 @@ void Solve(cadvent_state* State, u32 Year, u32 Day)
 {
     buffer InputFileBuffer = ReadInputFile(State, Year, Day);
     solver* Solver = GetSolver(State, Year, Day);
-    solution Solution = Solver(InputFileBuffer);
+    solution Solution = Solver(&State->Arena, InputFileBuffer);
     WriteOutputFile(State, Year, Day, Solution);
 }
