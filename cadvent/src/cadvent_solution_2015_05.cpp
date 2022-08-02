@@ -96,36 +96,23 @@ b32 IsActuallyNice(string Word)
 
 SOLVER(2015, 05)
 {
-    u32 PrevStartIndex = 0;
-    u8 PrevCharacter = 0;
     i32 NiceCount = 0;
     i32 ActuallyNiceCount = 0;
-    for (u32 InputIndex = 0; InputIndex < InputBuffer.Size; ++InputIndex)
+    
+    string_list Lines = StringSplit(Arena, InputBuffer, '\n');
+    
+    for (u32 LineIndex = 0; LineIndex < Lines.Count; ++LineIndex)
     {
-        u8 Character = InputBuffer.Data[InputIndex];
-        if (Character == '\n' || InputIndex == InputBuffer.Size - 1)
+        string Line = Lines.Strings[LineIndex];
+        
+        if (IsNice(Line))
         {
-            string Word;
-            Word.Size = InputIndex - PrevStartIndex;
-            Word.Data = InputBuffer.Data + PrevStartIndex;
-            
-            if (IsNice(Word))
-            {
-                ++NiceCount;
-            }
-            if (IsActuallyNice(Word))
-            {
-                ++ActuallyNiceCount;
-            }
+            ++NiceCount;
         }
-        else
+        if (IsActuallyNice(Line))
         {
-            if (PrevCharacter == '\n')
-            {
-                PrevStartIndex = InputIndex;
-            }
+            ++ActuallyNiceCount;
         }
-        PrevCharacter = Character;
     }
     
     solution Solution = { NiceCount, ActuallyNiceCount };

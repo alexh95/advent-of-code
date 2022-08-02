@@ -65,6 +65,49 @@ u32 StringFromI32(string String, u32 Offset, i32 Value)
     return StringFromI32(String, Offset, Value, 0, false);
 }
 
+
+i32 StringFirstIndexOfNumber(string String, u32 Offset)
+{
+    for (u32 Index = Offset; Index < String.Size; ++Index)
+    {
+        u8 C = String.Data[Index];
+        if (C >= '0' && C <= '9')
+        {
+            return Index;
+        }
+    }
+    return -1;
+}
+
+i32 StringFirstIndexOf(string String, u32 Offset, u8 Delimiter)
+{
+    for (u32 Index = Offset; Index < String.Size; ++Index)
+    {
+        u8 C = String.Data[Index];
+        if (C == Delimiter)
+        {
+            return Index;
+        }
+    }
+    return -1;
+}
+
+i32 StringToI32(string String, i32 Offset, i32 Size)
+{
+    i32 Result = 0;
+    i32 Exponent = 1;
+    
+    for (i32 StringIndex = Size - 1; StringIndex >= Offset; --StringIndex)
+    {
+        char Character = String.Data[StringIndex];
+        i32 ShiftedCharacter = (Character - 48) * Exponent;
+        Result += ShiftedCharacter;
+        Exponent *= 10;
+    }
+    
+    return Result;
+}
+
 i32 StringToI32(string String)
 {
     i32 Result = 0;
@@ -76,6 +119,58 @@ i32 StringToI32(string String)
         i32 ShiftedCharacter = (Character - 48) * Exponent;
         Result += ShiftedCharacter;
         Exponent *= 10;
+    }
+    
+    return Result;
+}
+
+struct string_list
+{
+    u32 Count;
+    string* Strings;
+};
+
+string_list StringSplit(memory_arena* Arena, string String, u8 Delimiter)
+{
+    string_list Result = {};
+    
+    u32 MatchCount = 0;
+    for (u32 Index = 0; Index < String.Size; ++Index)
+    {
+        u8 Character = String.Data[Index];
+        u32 Match = (Character == Delimiter) || (Index == String.Size - 1);
+        if (Match)
+        {
+            ++MatchCount;
+        }
+    }
+    Result.Count = MatchCount;
+    Result.Strings = ArenaPushArray(string, Arena, MatchCount);
+    
+    u32 PrevStartIndex = 0;
+    u8 PrevCharacter = 0;
+    u32 MatchIndex = 0;
+    for (u32 Index = 0; Index < String.Size; ++Index)
+    {
+        u8 Character = String.Data[Index];
+        
+        u32 Match = (Character == Delimiter) || (Index == String.Size - 1);
+        if (Match)
+        {
+            string NewString;
+            NewString.Size = Index - PrevStartIndex;
+            NewString.Data = String.Data + PrevStartIndex;
+            Result.Strings[MatchIndex++] = NewString;
+        }
+        else
+        {
+            if (PrevCharacter == Delimiter)
+            {
+                PrevStartIndex = Index;
+            }
+        }
+        
+        PrevCharacter = Character;
     }
     
     return Result;
