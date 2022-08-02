@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 #define Assert(Condition) if (!(Condition)) {*(int*)0 = 0;}
+#define InvalidCodePath Assert(0)
 #define ArrayCount(Array) (sizeof(Array) / sizeof(Array[0]))
 
 typedef int8_t i8;

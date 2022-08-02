@@ -15,6 +15,25 @@ u32 StringCopy(string Dst, string Src)
     return Src.Size;
 }
 
+b32 StringCompare(u8* A, u32 CountA, char* B)
+{
+    u32 CountB = StringLength(B);
+    if (CountA != CountB)
+    {
+        return false;
+    }
+    
+    for (u32 Index = 0; Index < CountA; ++Index)
+    {
+        if (A[Index] != B[Index])
+        {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
 #define MAX_STRING_LENGTH_I32 11
 u32 StringFromI32(string String, u32 Offset, i32 Value, u32 MinLength, b32 LeadingZeros)
 {
