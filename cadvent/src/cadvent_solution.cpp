@@ -7,11 +7,12 @@
 #include "cadvent_solution_2015_06.cpp"
 #include "cadvent_solution_2015_07.cpp"
 #include "cadvent_solution_2015_08.cpp"
+#include "cadvent_solution_2015_09.cpp"
 
 solver* Solvers[] =
 {
     SolveYear2015Day01, SolveYear2015Day02, SolveYear2015Day03, SolveYear2015Day04, SolveYear2015Day05,
-    SolveYear2015Day06, SolveYear2015Day07, SolveYear2015Day08,
+    SolveYear2015Day06, SolveYear2015Day07, SolveYear2015Day08, SolveYear2015Day09,
 };
 
 buffer ReadInputFile(cadvent_state* State, u32 Year, u32 Day)

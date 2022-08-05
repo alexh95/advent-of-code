@@ -1,6 +1,9 @@
 #ifndef CADVENT_MATH_H
 #define CADVENT_MATH_H
 
+#define MIN_U32 0
+#define MAX_U32 ((u32)-1)
+
 #define MIN(A, B) ((A) > (B) ? (B) : (A))
 #define MAX(A, B) ((A) > (B) ? (A) : (B))
 

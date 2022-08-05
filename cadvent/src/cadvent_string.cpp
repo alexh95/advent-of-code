@@ -5,6 +5,14 @@ string String(u32 Size)
     return Result;
 }
 
+string String(string S, u32 Offset, u32 Size)
+{
+    string Result;
+    Result.Size = Size;
+    Result.Data = S.Data + Offset;
+    return Result;
+}
+
 u32 StringCopy(string Dst, string Src)
 {
     Assert(Dst.Size >= Src.Size);
@@ -15,15 +23,14 @@ u32 StringCopy(string Dst, string Src)
     return Src.Size;
 }
 
-b32 StringCompare(u8* A, u32 CountA, char* B)
+b32 StringCompare(u8* A, u32 SizeA, u8* B, u32 SizeB)
 {
-    u32 CountB = StringLength(B);
-    if (CountA != CountB)
+    if (SizeA != SizeB)
     {
         return false;
     }
     
-    for (u32 Index = 0; Index < CountA; ++Index)
+    for (u32 Index = 0; Index < SizeA; ++Index)
     {
         if (A[Index] != B[Index])
         {
@@ -32,6 +39,19 @@ b32 StringCompare(u8* A, u32 CountA, char* B)
     }
     
     return true;
+}
+
+b32 StringCompare(u8* A, u32 SizeA, char* B)
+{
+    u32 SizeB = StringLength(B);
+    b32 Result = StringCompare(A, SizeA, (u8*)B, SizeB);
+    return Result;
+}
+
+b32 StringCompare(string A, string B)
+{
+    b32 Result = StringCompare(A.Data, A.Size, B.Data, B.Size);
+    return Result;
 }
 
 #define MAX_STRING_LENGTH_I32 11
