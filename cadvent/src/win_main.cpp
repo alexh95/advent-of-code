@@ -39,6 +39,7 @@ PLATFORM_CREATE_AND_WRITE_FILE(WinCreateAndWriteFile)
     }
     
     WriteFile(FileHandle, Buffer.Data, (u32)Size, 0, 0);
+    CloseHandle(FileHandle);
 }
 
 int WinMain(HINSTANCE Instance, HINSTANCE PrevInstance, LPSTR CmdLine, int ShowCmd)
@@ -51,12 +52,12 @@ int WinMain(HINSTANCE Instance, HINSTANCE PrevInstance, LPSTR CmdLine, int ShowC
     State.Platform.OpenAndReadFile = WinOpenAndReadFile;
     State.Platform.CreateAndWriteFile = WinCreateAndWriteFile;
     
-    u32 CurrentDay = 10;
+    u32 CurrentDay = 11;
     Solve(&State, 2015, CurrentDay); 
     /*
-for (u32 Day = 1; Day <= CurrentDay; ++Day)
+    for (u32 Day = 1; Day <= CurrentDay; ++Day)
     {
-          Solve(&State, 2015, Day);
+        Solve(&State, 2015, Day);
     }
 */
     

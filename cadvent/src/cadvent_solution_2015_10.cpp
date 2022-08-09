@@ -46,6 +46,6 @@ SOLVER(2015, 10)
         NewSequence = Temp;
     }
     
-    solution Solution = { LengthAt40, (i32)OldSequenceSize };
-    return Solution;
+    solution Result = Solution(Arena, LengthAt40, (i32)OldSequenceSize);
+    return Result;
 }

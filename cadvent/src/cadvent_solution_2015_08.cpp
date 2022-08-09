@@ -93,6 +93,6 @@ SOLVER(2015, 08)
     i32 ParsedDelta =  StringSizeTotal - ParsedSizeTotal;
     i32 EncodedDelta = EncodedSizeTotal - StringSizeTotal;
     
-    solution Solution = { ParsedDelta, EncodedDelta };
-    return Solution;
+    solution Result = Solution(Arena, ParsedDelta, EncodedDelta);
+    return Result;
 }

@@ -13,14 +13,20 @@ string String(string S, u32 Offset, u32 Size)
     return Result;
 }
 
-u32 StringCopy(string Dst, string Src)
+u32 StringCopy(string Dst, u32 DstOffset, string Src)
 {
     Assert(Dst.Size >= Src.Size);
     for (u32 Index = 0; Index < Src.Size; ++Index)
     {
-        Dst.Data[Index] = Src.Data[Index];
+        Dst.Data[DstOffset + Index] = Src.Data[Index];
     }
-    return Src.Size;
+    return DstOffset + Src.Size;
+}
+
+u32 StringCopy(string Dst, string Src)
+{
+    u32 Result = StringCopy(Dst, 0, Src);
+    return Result;
 }
 
 b32 StringCompare(u8* A, u32 SizeA, u8* B, u32 SizeB)

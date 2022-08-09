@@ -67,6 +67,6 @@ SOLVER(2015, 03)
         }
     }
     
-    solution Solution = { VisitedCount, VisitedCountSplit };
-    return Solution;
+    solution Result = Solution(Arena, VisitedCount, VisitedCountSplit);
+    return Result;
 }

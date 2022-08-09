@@ -75,20 +75,33 @@ inline string ArenaPushStringInternal(memory_arena* Arena, u32 Count)
     return Result;
 }
 
-inline string ArenaPushStringInternal(memory_arena* Arena, char* String)
+inline string ArenaPushStringInternal(memory_arena* Arena, char* S, u32 Count)
 {
-    u32 Size = StringLength(String);
-    Assert(Arena->Used + Size < Arena->Size);
+    Assert(Arena->Used + Count < Arena->Size);
     
     string Result;
-    Result.Size = Size;
+    Result.Size = Count;
     Result.Data = Arena->Base + Arena->Used;
-    for (u32 Index = 0; Index < Size; ++Index)
+    for (u32 Index = 0; Index < Count; ++Index)
     {
-        Result.Data[Index] = String[Index];
+        Result.Data[Index] = S[Index];
     }
-    Arena->Used += Size;
+    Arena->Used += Count;
     
+    return Result;
+}
+
+inline string ArenaPushStringInternal(memory_arena* Arena, char* S)
+{
+    u32 Count = StringLength(S);
+    string Result = ArenaPushStringInternal(Arena, S, Count);
+    return Result;
+}
+
+
+inline string ArenaPushStringInternal(memory_arena* Arena, string S)
+{
+    string Result = ArenaPushStringInternal(Arena, (char*)S.Data, S.Size);
     return Result;
 }
 

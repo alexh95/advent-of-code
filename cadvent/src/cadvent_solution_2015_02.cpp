@@ -46,6 +46,6 @@ SOLVER(2015, 02)
         }
     }
     
-    solution Solution = { FullAreaSum, FullPerimeterAndVolumeSum };
-    return Solution;
+    solution Result = Solution(Arena, FullAreaSum, FullPerimeterAndVolumeSum);
+    return Result;
 }

@@ -9,11 +9,13 @@
 #include "cadvent_solution_2015_08.cpp"
 #include "cadvent_solution_2015_09.cpp"
 #include "cadvent_solution_2015_10.cpp"
+#include "cadvent_solution_2015_11.cpp"
 
 solver* Solvers[] =
 {
     SolveYear2015Day01, SolveYear2015Day02, SolveYear2015Day03, SolveYear2015Day04, SolveYear2015Day05,
     SolveYear2015Day06, SolveYear2015Day07, SolveYear2015Day08, SolveYear2015Day09, SolveYear2015Day10,
+    SolveYear2015Day11,
 };
 
 buffer ReadInputFile(cadvent_state* State, u32 Year, u32 Day)
@@ -44,10 +46,31 @@ void WriteOutputFile(cadvent_state* State, u32 Year, u32 Day, solution Solution)
     StringFromI32(OutputFilePath, 20, Day, 2, true);
     OutputFilePath.Data[OutputFilePath.Size - 1] = 0;
     
-    string SolutionString = ArenaPushString(&State->Arena, 50);
-    u32 SolutionIndex = StringFromI32(SolutionString, 0, Solution.FirstPart);
-    SolutionString.Data[SolutionIndex++] = '\n';
-    SolutionIndex = StringFromI32(SolutionString, SolutionIndex, Solution.SecondPart);
+    string SolutionString = ArenaPushString(&State->Arena, 64);
+    u32 SolutionIndex = 0;
+    switch (Solution.Type)
+    {
+        case SolutionType_I32:
+        {
+            solution_i32* Value = (solution_i32*)Solution.Value;
+            SolutionIndex = StringFromI32(SolutionString, 0, Value->FirstPart);
+            SolutionString.Data[SolutionIndex++] = '\n';
+            SolutionIndex = StringFromI32(SolutionString, SolutionIndex, Value->SecondPart);
+            SolutionString.Data[SolutionIndex++] = '\n';
+        } break;
+        case SolutionType_String2:
+        {
+            solution_string2* Value = (solution_string2*)Solution.Value;
+            SolutionIndex = StringCopy(SolutionString, 0, Value->FirstPart);
+            SolutionString.Data[SolutionIndex++] = '\n';
+            SolutionIndex = StringCopy(SolutionString, SolutionIndex, Value->SecondPart);
+            SolutionString.Data[SolutionIndex++] = '\n';
+        } break;
+        default:
+        {
+            InvalidCodePath;
+        }
+    }
     
     State->Platform.CreateAndWriteFile((char*)OutputFilePath.Data, SolutionString, SolutionIndex);
 }

@@ -29,6 +29,6 @@ SOLVER(2015, 04)
         ++Index;
     }
     
-    solution Solution = { FiveZeroNumber, SixZeroNumber };
-    return Solution;
+    solution Result = Solution(Arena, FiveZeroNumber, SixZeroNumber);
+    return Result;
 }

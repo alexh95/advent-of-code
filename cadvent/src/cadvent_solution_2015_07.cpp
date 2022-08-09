@@ -384,6 +384,6 @@ SOLVER(2015, 07)
     
     i32 SignalOverriddenAValue = ContextOverridden.SignalValues[SignalAIndex];
     
-    solution Solution = { SignalAValue, SignalOverriddenAValue };
-    return Solution;
+    solution Result = Solution(Arena, SignalAValue, SignalOverriddenAValue);
+    return Result;
 }

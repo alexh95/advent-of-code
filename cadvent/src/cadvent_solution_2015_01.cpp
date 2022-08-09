@@ -19,6 +19,6 @@ SOLVER(2015, 01)
         }
     }
     
-    solution Solution = { Floor, BasementIndex };
-    return Solution;
+    solution Result = Solution(Arena, Floor, BasementIndex);
+    return Result;
 }

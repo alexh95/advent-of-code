@@ -104,6 +104,6 @@ SOLVER(2015, 06)
         }
     }
     
-    solution Solution = { LitCount, DimmableLitCount };
-    return Solution;
+    solution Result = Solution(Arena, LitCount, DimmableLitCount);
+    return Result;
 }

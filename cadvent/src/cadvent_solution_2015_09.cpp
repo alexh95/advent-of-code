@@ -233,6 +233,6 @@ SOLVER(2015, 09)
         }
     }
     
-    solution Solution = { (i32)MinCostOverall, (i32)MaxCostOverall };
-    return Solution;
+    solution Result = Solution(Arena, (i32)MinCostOverall, (i32)MaxCostOverall);
+    return Result;
 }

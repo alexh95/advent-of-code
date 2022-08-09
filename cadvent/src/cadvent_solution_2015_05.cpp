@@ -115,6 +115,6 @@ SOLVER(2015, 05)
         }
     }
     
-    solution Solution = { NiceCount, ActuallyNiceCount };
-    return Solution;
+    solution Result = Solution(Arena, NiceCount, ActuallyNiceCount);
+    return Result;
 }
