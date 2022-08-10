@@ -13,17 +13,23 @@ string String(string S, u32 Offset, u32 Size)
     return Result;
 }
 
-u32 StringCopy(string Dst, u32 DstOffset, string Src)
+u32 StringCopy(string Dst, u32 DstOffset, string Src, u32 SrcOffset, u32 SrcCount)
 {
-    Assert(Dst.Size >= Src.Size);
-    for (u32 Index = 0; Index < Src.Size; ++Index)
+    Assert(Dst.Size >= SrcCount);
+    for (u32 Index = 0; Index < SrcCount; ++Index)
     {
-        Dst.Data[DstOffset + Index] = Src.Data[Index];
+        Dst.Data[DstOffset + Index] = Src.Data[SrcOffset + Index];
     }
     return DstOffset + Src.Size;
 }
 
-u32 StringCopy(string Dst, string Src)
+inline u32 StringCopy(string Dst, u32 DstOffset, string Src)
+{
+    u32 Result = StringCopy(Dst, DstOffset, Src, 0, Src.Size);
+    return Result;
+}
+
+inline u32 StringCopy(string Dst, string Src)
 {
     u32 Result = StringCopy(Dst, 0, Src);
     return Result;
@@ -47,21 +53,28 @@ b32 StringCompare(u8* A, u32 SizeA, u8* B, u32 SizeB)
     return true;
 }
 
-b32 StringCompare(u8* A, u32 SizeA, char* B)
+
+inline b32 StringCompare(u8* A, u32 SizeA, char* B)
 {
     u32 SizeB = StringLength(B);
     b32 Result = StringCompare(A, SizeA, (u8*)B, SizeB);
     return Result;
 }
 
-b32 StringCompare(string A, string B)
+inline b32 StringCompare(string A, char* B)
+{
+    b32 Result = StringCompare(A.Data, A.Size, B);
+    return Result;
+}
+
+inline b32 StringCompare(string A, string B)
 {
     b32 Result = StringCompare(A.Data, A.Size, B.Data, B.Size);
     return Result;
 }
 
 #define MAX_STRING_LENGTH_I32 11
-u32 StringFromI32(string String, u32 Offset, i32 Value, u32 MinLength, b32 LeadingZeros)
+u32 StringFromI32(string S, u32 Offset, i32 Value, u32 MinLength, b32 LeadingZeros)
 {
     u8 Characters[MAX_STRING_LENGTH_I32] = {};
     u32 Size = 0;
@@ -100,23 +113,35 @@ u32 StringFromI32(string String, u32 Offset, i32 Value, u32 MinLength, b32 Leadi
     for (u32 Index = 0; Index < Size; ++Index)
     {
         LastIndex = Offset + Index;
-        String.Data[LastIndex] = Characters[Size - 1 - Index];
+        S.Data[LastIndex] = Characters[Size - 1 - Index];
     }
     return LastIndex + 1;
 }
 
-u32 StringFromI32(string String, u32 Offset, i32 Value)
+u32 StringFromI32(string S, u32 Offset, i32 Value)
 {
-    return StringFromI32(String, Offset, Value, 0, false);
+    u32 Result = StringFromI32(S, Offset, Value, 0, false);
+    return Result;
 }
 
-
-i32 StringFirstIndexOfNumber(string String, u32 Offset)
+inline b32 CharacterIsWhitespace(u8 C)
 {
-    for (u32 Index = Offset; Index < String.Size; ++Index)
+    b32 Result = (C == ' ') || (C == '\t') || (C == '\n') || (C == '\r');
+    return Result;
+}
+
+inline b32 CharacterIsNumber(u8 C)
+{
+    b32 Result = (C >= '0' && C <= '9') || (C == '-');
+    return Result;
+}
+
+i32 StringFirstIndexOfNumber(string S, u32 From)
+{
+    for (u32 Index = From; Index < S.Size; ++Index)
     {
-        u8 C = String.Data[Index];
-        if (C >= '0' && C <= '9')
+        u8 C = S.Data[Index];
+        if (CharacterIsNumber(C))
         {
             return Index;
         }
@@ -124,11 +149,24 @@ i32 StringFirstIndexOfNumber(string String, u32 Offset)
     return -1;
 }
 
-i32 StringFirstIndexOf(string String, u32 Offset, u8 Delimiter)
+i32 StringFirstIndexOfNonNumber(string S, u32 From)
 {
-    for (u32 Index = Offset; Index < String.Size; ++Index)
+    for (u32 Index = From; Index < S.Size; ++Index)
     {
-        u8 C = String.Data[Index];
+        u8 C = S.Data[Index];
+        if (!CharacterIsNumber(C))
+        {
+            return Index;
+        }
+    }
+    return -1;
+}
+
+i32 StringFirstIndexOf(string S, u32 Offset, u8 Delimiter)
+{
+    for (u32 Index = Offset; Index < S.Size; ++Index)
+    {
+        u8 C = S.Data[Index];
         if (C == Delimiter)
         {
             return Index;
@@ -137,30 +175,38 @@ i32 StringFirstIndexOf(string String, u32 Offset, u8 Delimiter)
     return -1;
 }
 
-i32 StringToI32(string String, i32 Offset, i32 Size)
+i32 StringToI32(string S, i32 From, i32 To)
 {
     i32 Result = 0;
     i32 Exponent = 1;
     
-    for (i32 StringIndex = Size - 1; StringIndex >= Offset; --StringIndex)
+    for (i32 StringIndex = To - 1; StringIndex >= From; --StringIndex)
     {
-        char Character = String.Data[StringIndex];
-        i32 ShiftedCharacter = (Character - 48) * Exponent;
-        Result += ShiftedCharacter;
-        Exponent *= 10;
+        char Character = S.Data[StringIndex];
+        if (Character != '-')
+        {
+            i32 ShiftedCharacter = (Character - 48) * Exponent;
+            Result += ShiftedCharacter;
+            Exponent *= 10;
+        }
+        else
+        {
+            Assert(StringIndex == From);
+            Result = -Result;
+        }
     }
     
     return Result;
 }
 
-i32 StringToI32(string String)
+i32 StringToI32(string S)
 {
     i32 Result = 0;
     i32 Exponent = 1;
     
-    for (i32 StringIndex = String.Size - 1; StringIndex >= 0; --StringIndex)
+    for (i32 StringIndex = S.Size - 1; StringIndex >= 0; --StringIndex)
     {
-        char Character = String.Data[StringIndex];
+        char Character = S.Data[StringIndex];
         i32 ShiftedCharacter = (Character - 48) * Exponent;
         Result += ShiftedCharacter;
         Exponent *= 10;
@@ -175,15 +221,15 @@ struct string_list
     string* Strings;
 };
 
-string_list StringSplit(memory_arena* Arena, string String, u8 Delimiter)
+string_list StringSplit(memory_arena* Arena, string S, u8 Delimiter)
 {
     string_list Result = {};
     
     u32 MatchCount = 0;
-    for (u32 Index = 0; Index < String.Size; ++Index)
+    for (u32 Index = 0; Index < S.Size; ++Index)
     {
-        u8 Character = String.Data[Index];
-        u32 Match = (Character == Delimiter) || (Index == String.Size - 1);
+        u8 C = S.Data[Index];
+        u32 Match = (C == Delimiter) || (Index == S.Size - 1);
         if (Match)
         {
             ++MatchCount;
@@ -195,16 +241,16 @@ string_list StringSplit(memory_arena* Arena, string String, u8 Delimiter)
     u32 PrevStartIndex = 0;
     u8 PrevCharacter = 0;
     u32 MatchIndex = 0;
-    for (u32 Index = 0; Index < String.Size; ++Index)
+    for (u32 Index = 0; Index < S.Size; ++Index)
     {
-        u8 Character = String.Data[Index];
+        u8 C = S.Data[Index];
         
-        u32 Match = (Character == Delimiter) || (Index == String.Size - 1);
+        u32 Match = (C == Delimiter) || (Index == S.Size - 1);
         if (Match)
         {
             string NewString;
             NewString.Size = Index - PrevStartIndex;
-            NewString.Data = String.Data + PrevStartIndex;
+            NewString.Data = S.Data + PrevStartIndex;
             Result.Strings[MatchIndex++] = NewString;
         }
         else
@@ -215,7 +261,7 @@ string_list StringSplit(memory_arena* Arena, string String, u8 Delimiter)
             }
         }
         
-        PrevCharacter = Character;
+        PrevCharacter = C;
     }
     
     return Result;

@@ -30,12 +30,12 @@ struct solution_string2
 
 #define SOLVER_NAME(YEAR, DAY) SolveYear ## YEAR ## Day ## DAY
 
-#define SOLVER(Year, Day) solution SOLVER_NAME(Year, Day)(memory_arena* Arena, buffer InputBuffer)
+#define SOLVER(Year, Day) static solution SOLVER_NAME(Year, Day)(memory_arena* Arena, buffer InputBuffer)
 
 #define SOLVER_(Name) solution Name(memory_arena* Arena, buffer InputBuffer)
 typedef SOLVER_(solver);
 
-solution Solution(memory_arena* Arena, i32 FirstPart, i32 SecondPart)
+static solution Solution(memory_arena* Arena, i32 FirstPart, i32 SecondPart)
 {
     solution Solution;
     Solution.Type = SolutionType_I32;
@@ -46,7 +46,7 @@ solution Solution(memory_arena* Arena, i32 FirstPart, i32 SecondPart)
     return Solution;
 }
 
-solution Solution(memory_arena* Arena, string FirstPart, string SecondPart)
+static solution Solution(memory_arena* Arena, string FirstPart, string SecondPart)
 {
     solution Solution;
     Solution.Type = SolutionType_String2;
