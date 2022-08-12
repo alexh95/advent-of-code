@@ -4,6 +4,9 @@
 #define MIN_U32 0
 #define MAX_U32 ((u32)-1)
 
+#define MIN_I32 ((i32)0x80000000)
+#define MAX_I32 ((i32)0X7FFFFFFF)
+
 #define MIN(A, B) ((A) > (B) ? (B) : (A))
 #define MAX(A, B) ((A) > (B) ? (A) : (B))
 

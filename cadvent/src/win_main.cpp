@@ -2,6 +2,7 @@
 #include "cadvent_types.h"
 #include "cadvent_math.h"
 #include "cadvent_string.cpp"
+#include "cadvent_table.h"
 #include "md5.cpp"
 #include "cadvent_json.h"
 #include "cadvent_solution.cpp"
@@ -53,7 +54,7 @@ int WinMain(HINSTANCE Instance, HINSTANCE PrevInstance, LPSTR CmdLine, int ShowC
     State.Platform.OpenAndReadFile = WinOpenAndReadFile;
     State.Platform.CreateAndWriteFile = WinCreateAndWriteFile;
     
-    u32 CurrentDay = 12;
+    u32 CurrentDay = 13;
     Solve(&State, 2015, CurrentDay); 
     
     /*for (u32 Day = 1; Day <= CurrentDay; ++Day)

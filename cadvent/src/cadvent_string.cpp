@@ -175,6 +175,20 @@ i32 StringFirstIndexOf(string S, u32 Offset, u8 Delimiter)
     return -1;
 }
 
+i32 StringLastIndexOf(string S, u32 Offset, u8 Delimiter)
+{
+    i32 Result = -1;
+    for (u32 Index = Offset; Index < S.Size; ++Index)
+    {
+        u8 C = S.Data[Index];
+        if (C == Delimiter)
+        {
+            Result = Index;
+        }
+    }
+    return Result;
+}
+
 i32 StringToI32(string S, i32 From, i32 To)
 {
     i32 Result = 0;
@@ -249,7 +263,7 @@ string_list StringSplit(memory_arena* Arena, string S, u8 Delimiter)
         if (Match)
         {
             string NewString;
-            NewString.Size = Index - PrevStartIndex;
+            NewString.Size = Index - PrevStartIndex + ((C == Delimiter) ? 0 : 1);
             NewString.Data = S.Data + PrevStartIndex;
             Result.Strings[MatchIndex++] = NewString;
         }
