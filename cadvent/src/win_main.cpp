@@ -54,7 +54,7 @@ int WinMain(HINSTANCE Instance, HINSTANCE PrevInstance, LPSTR CmdLine, int ShowC
     State.Platform.OpenAndReadFile = WinOpenAndReadFile;
     State.Platform.CreateAndWriteFile = WinCreateAndWriteFile;
     
-    u32 CurrentDay = 15;
+    u32 CurrentDay = 16;
     Solve(&State, 2015, CurrentDay); 
     
     /*for (u32 Day = 1; Day <= CurrentDay; ++Day)

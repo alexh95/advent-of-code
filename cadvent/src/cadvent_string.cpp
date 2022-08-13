@@ -5,6 +5,14 @@ string String(u32 Size)
     return Result;
 }
 
+string String(char* S)
+{
+    string Result;
+    Result.Size = StringLength(S);
+    Result.Data = (u8*)S;
+    return Result;
+}
+
 string String(string S, u32 Offset, u32 Size)
 {
     string Result;
