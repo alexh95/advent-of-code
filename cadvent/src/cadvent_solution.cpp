@@ -17,13 +17,14 @@
 #include "cadvent_solution_2015_16.cpp"
 #include "cadvent_solution_2015_17.cpp"
 #include "cadvent_solution_2015_18.cpp"
+#include "cadvent_solution_2015_19.cpp"
 
 solver* Solvers[] =
 {
     SolveYear2015Day01, SolveYear2015Day02, SolveYear2015Day03, SolveYear2015Day04, SolveYear2015Day05,
     SolveYear2015Day06, SolveYear2015Day07, SolveYear2015Day08, SolveYear2015Day09, SolveYear2015Day10,
     SolveYear2015Day11, SolveYear2015Day12, SolveYear2015Day13, SolveYear2015Day14, SolveYear2015Day15,
-    SolveYear2015Day16, SolveYear2015Day17, SolveYear2015Day18,
+    SolveYear2015Day16, SolveYear2015Day17, SolveYear2015Day18, SolveYear2015Day19,
 };
 
 buffer ReadInputFile(cadvent_state* State, u32 Year, u32 Day)
@@ -87,6 +88,8 @@ void Solve(cadvent_state* State, u32 Year, u32 Day)
 {
     buffer InputFileBuffer = ReadInputFile(State, Year, Day);
     solver* Solver = GetSolver(State, Year, Day);
+    umm PrevArenaUsed = State->Arena.Used;
     solution Solution = Solver(&State->Arena, InputFileBuffer);
+    State->Arena.Used = PrevArenaUsed;
     WriteOutputFile(State, Year, Day, Solution);
 }

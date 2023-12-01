@@ -21,9 +21,17 @@ string String(string S, u32 Offset, u32 Size)
     return Result;
 }
 
+string StringI(string S, u32 FromIndex, u32 ToIndex)
+{
+    string Result;
+    Result.Size = ToIndex - FromIndex;
+    Result.Data = S.Data + FromIndex;
+    return Result;
+}
+
 u32 StringCopy(string Dst, u32 DstOffset, string Src, u32 SrcOffset, u32 SrcCount)
 {
-    Assert(Dst.Size >= SrcCount);
+    Assert(Dst.Size >= SrcCount + DstOffset - SrcOffset);
     for (u32 Index = 0; Index < SrcCount; ++Index)
     {
         Dst.Data[DstOffset + Index] = Src.Data[SrcOffset + Index];
@@ -261,7 +269,6 @@ string_list StringSplit(memory_arena* Arena, string S, u8 Delimiter)
     Result.Strings = ArenaPushArray(string, Arena, MatchCount);
     
     u32 PrevStartIndex = 0;
-    u8 PrevCharacter = 0;
     u32 MatchIndex = 0;
     for (u32 Index = 0; Index < S.Size; ++Index)
     {
@@ -274,16 +281,8 @@ string_list StringSplit(memory_arena* Arena, string S, u8 Delimiter)
             NewString.Size = Index - PrevStartIndex + ((C == Delimiter) ? 0 : 1);
             NewString.Data = S.Data + PrevStartIndex;
             Result.Strings[MatchIndex++] = NewString;
+            PrevStartIndex = Index + 1;
         }
-        else
-        {
-            if (PrevCharacter == Delimiter)
-            {
-                PrevStartIndex = Index;
-            }
-        }
-        
-        PrevCharacter = C;
     }
     
     return Result;

@@ -77,7 +77,7 @@ hash_table_element* HashTableAddElement(hash_table* Table, string Value)
     return NewElement;
 }
 
-hash_table_element*HashTableAddElementIfAbsent(hash_table* Table, string Value)
+hash_table_element* HashTableAddElementIfAbsent(hash_table* Table, string Value)
 {
     hash_table_element* Element = HashTableGetElement(Table, Value);
     if (!Element)
