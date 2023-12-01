@@ -140,7 +140,9 @@ i32 MinDepthToMolecule(memory_arena* Arena,
     string NewMolecule = ArenaPushString(Arena, Molecule);
     string CurrentMolecule = ArenaPushString(Arena, Molecule);
     
-    umm PrevArenaUsed = Arena->Used;
+    hash_table MoleculeHashTable = CreateHashTable(Arena, 2048);
+    
+    //umm PrevArenaUsed = Arena->Used;
     b32 NotDone = true;
     while (NotDone)
     {
@@ -149,36 +151,59 @@ i32 MinDepthToMolecule(memory_arena* Arena,
         FindCompoundMatches(Arena, CurrentMolecule,
                             CompoundHashTable, CompoundReplacements, CompoundReplacementCount,
                             &CompoundBackwardMatches, &CompoundBackwardMatchCount, false);
-        
-        if (CompoundBackwardMatchCount > 0)
+        u32 MatchUsed = 0;
+        b32 Retry = true;
+        u32 HV = 0;
+        while (NotDone && Retry)
         {
-            u32 NewMatchIndex = (u32)(NextU64(&PrngState) % CompoundBackwardMatchCount);
-            compound_match Match = CompoundBackwardMatches[NewMatchIndex];
-            
-            compound_replacement CompoundReplacement = CompoundReplacements[Match.CompoundReplacementIndex];
-            string FromCompound = CompoundHashTable->Elements[CompoundReplacement.ToIndex].Value;
-            string ToCompound = CompoundHashTable->Elements[CompoundReplacement.FromIndex].Value;
-            
-            u32 NewMoleculeSize = CurrentMolecule.Size + ToCompound.Size - FromCompound.Size;
-            NewMolecule.Size = NewMoleculeSize;
-            ReplaceCompound(NewMolecule, CurrentMolecule, Match.MoleculeIndex, FromCompound, ToCompound);
-            CurrentMolecule.Size = NewMoleculeSize;
-            StringCopy(CurrentMolecule, NewMolecule);
-            
-            if (StringCompare(CurrentMolecule, "e"))
+            if (CompoundBackwardMatchCount - MatchUsed > 0)
             {
-                NotDone = false;
+                u32 NewMatchIndex = (u32)(NextU64(&PrngState) % (CompoundBackwardMatchCount - MatchUsed));
+                compound_match Match = CompoundBackwardMatches[NewMatchIndex];
+                CompoundBackwardMatches[NewMatchIndex] = CompoundBackwardMatches[CompoundBackwardMatchCount - MatchUsed - 1];
+                
+                compound_replacement CompoundReplacement = CompoundReplacements[Match.CompoundReplacementIndex];
+                string FromCompound = CompoundHashTable->Elements[CompoundReplacement.ToIndex].Value;
+                string ToCompound = CompoundHashTable->Elements[CompoundReplacement.FromIndex].Value;
+                
+                u32 NewMoleculeSize = CurrentMolecule.Size + ToCompound.Size - FromCompound.Size;
+                NewMolecule.Size = NewMoleculeSize;
+                ReplaceCompound(NewMolecule, CurrentMolecule, Match.MoleculeIndex, FromCompound, ToCompound);
+                CurrentMolecule.Size = NewMoleculeSize;
+                StringCopy(CurrentMolecule, NewMolecule);
+                
+                HV = HashTableHashValue(&MoleculeHashTable, CurrentMolecule);
+                
+                if (StringCompare(CurrentMolecule, "e"))
+                {
+                    NotDone = false;
+                }
+                else
+                {
+                    if (HashTableGetElement(&MoleculeHashTable, CurrentMolecule))
+                    {
+                        ++MatchUsed;
+                    }
+                    else
+                    {
+                        Retry = false;
+                    }
+                }
+                
+                ++Result;
             }
-            
-            ++Result;
-        }
-        else
-        {
-            CurrentMolecule.Size = Molecule.Size;
-            StringCopy(CurrentMolecule, Molecule);
-            Result = 0;
-            Arena->Used = PrevArenaUsed;
-            SetSeed(&PrngState, NextU64(&PrngState));
+            else
+            {
+                HV = HashTableHashValue(&MoleculeHashTable, CurrentMolecule);
+                
+                HashTableAddElementIfAbsent(&MoleculeHashTable, CurrentMolecule);
+                Retry = false;
+                CurrentMolecule.Size = Molecule.Size;
+                StringCopy(CurrentMolecule, Molecule);
+                Result = 0;
+                //Arena->Used = PrevArenaUsed;
+                SetSeed(&PrngState, NextU64(&PrngState));
+            }
         }
     }
     

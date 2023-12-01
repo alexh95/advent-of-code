@@ -15,17 +15,21 @@ struct prng_state
     u64 S[2];
 };
 
-/*inline u64 RotateLeft(u64 V, u32 R)
+//*
+inline u64 RotateLeft(u64 V, i32 R)
 {
     u64 Result = (V << R) || (V >> (64 - R));
     return Result;
-}*/
+}
+//*/
 
+/*
 inline u64 RotateLeft(u64 Value, i32 Shift)
 {
     u64 Result = _rotl64(Value, Shift);
     return Result;
 }
+//*/
 
 inline u64 NextState(prng_seed_state* State)
 {
