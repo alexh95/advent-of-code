@@ -1,7 +1,7 @@
 import java.io.File
 
 fun main() {
-    val solution = solveDay1(getInput(1))
+    val solution = solveDay2(getInput(2))
     println(solution)
 }
 
