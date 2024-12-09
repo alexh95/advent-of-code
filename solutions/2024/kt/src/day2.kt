@@ -7,11 +7,11 @@ fun solveDay2(input: List<String>): Pair<Int, Int> {
     return Pair(validReportCount, validDampenedReportCount)
 }
 
-fun safeReportValue(report: List<Int>): Int {
+private fun safeReportValue(report: List<Int>): Int {
     return if (safeReport(report)) 1 else 0
 }
 
-fun dampenedReportValue(report: List<Int>): Int {
+private fun dampenedReportValue(report: List<Int>): Int {
     for (index in report.indices) {
         val dampenedReport = report.slice(0..<index) + report.slice((index + 1)..report.lastIndex)
         if (safeReport(dampenedReport)) {
@@ -21,7 +21,7 @@ fun dampenedReportValue(report: List<Int>): Int {
     return 0
 }
 
-fun safeReport(report: List<Int>): Boolean {
+private fun safeReport(report: List<Int>): Boolean {
     val deltas = report.zip(report.drop(1)).map { (l, r) -> l - r }
     val firstSign = sign(deltas[0])
     if (!deltas.all { sign(it) == firstSign }) {
@@ -33,7 +33,7 @@ fun safeReport(report: List<Int>): Boolean {
     return true
 }
 
-fun sign(value: Int): Int {
+private fun sign(value: Int): Int {
     return if (value < 0) -1
     else if (value > 0) 1
     else 0

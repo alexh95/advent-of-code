@@ -9,11 +9,11 @@ fun solveDay1(input: List<String>): Pair<Int, Int> {
     return Pair(distanceSum, similarityScore)
 }
 
-fun orderedDistanceSum(left: List<Int>, right: List<Int>): Int {
+private fun orderedDistanceSum(left: List<Int>, right: List<Int>): Int {
     return left.zip(right).sumOf { (l, r) -> abs(l - r) }
 }
 
-fun computeSimilarityScore(left: List<Int>, right: List<Int>): Int {
+private fun computeSimilarityScore(left: List<Int>, right: List<Int>): Int {
     val occurrence = right.associateBy ({ it }, { right.count { r -> it == r } })
     return left.sumOf { it * (occurrence[it] ?: 0) }
 }
