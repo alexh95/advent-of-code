@@ -4,11 +4,11 @@ fun getInput(day: Int): List<String> {
     return File("../../../data/2024/day${day}.txt").readLines()
 }
 
-fun getOutput(day: Int): Pair<Int, Int> {
-    return File("../../../data/2024/output${day}.txt").readText().split(" ").map { it.toInt() }.toPair()
+fun getOutput(day: Int): Pair<Long, Long> {
+    return File("../../../data/2024/output${day}.txt").readText().split(" ").map { it.toLong() }.toPair()
 }
 
-fun writeOutput(day: Int, value: Pair<Int, Int>) {
+fun writeOutput(day: Int, value: Pair<Number, Number>) {
     return File("../../../data/2024/output${day}.txt").writeText("${value.first} ${value.second}")
 }
 

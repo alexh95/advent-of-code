@@ -1,4 +1,4 @@
-const val daysGone = 6
+const val daysGone = 7
 
 fun main() {
     val day = daysGone
@@ -7,9 +7,9 @@ fun main() {
     writeOutput(day, solution)
 }
 
-fun solve(day: Int): Pair<Int, Int> = solve(day, getInput(day))
+fun solve(day: Int): Pair<Number, Number> = solve(day, getInput(day))
 
-fun solve(day: Int, input: List<String>): Pair<Int, Int> {
+fun solve(day: Int, input: List<String>): Pair<Number, Number> {
     return when (day) {
         1 -> solveDay1(input)
         2 -> solveDay2(input)
@@ -17,6 +17,7 @@ fun solve(day: Int, input: List<String>): Pair<Int, Int> {
         4 -> solveDay4(input)
         5 -> solveDay5(input)
         6 -> solveDay6(input)
+        7 -> solveDay7(input)
         else -> Pair(0, 0)
     }
 }
