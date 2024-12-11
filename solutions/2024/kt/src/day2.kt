@@ -1,10 +1,10 @@
 import kotlin.math.abs
 
-fun solveDay2(input: List<String>): Pair<Int, Int> {
+fun solveDay2(input: List<String>): Solution {
     val reports = input.map { it.split(" ").map { s -> s.toInt() } }
     val validReportCount = reports.sumOf { safeReportValue(it) }
     val validDampenedReportCount = reports.sumOf { dampenedReportValue(it) }
-    return Pair(validReportCount, validDampenedReportCount)
+    return Solution(validReportCount, validDampenedReportCount)
 }
 
 private fun safeReportValue(report: List<Int>): Int {

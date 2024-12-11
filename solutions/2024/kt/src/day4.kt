@@ -1,11 +1,11 @@
 import java.util.concurrent.atomic.AtomicInteger
 
-fun solveDay4(input: List<String>): Pair<Int, Int> {
+fun solveDay4(input: List<String>): Solution {
     val rows = input.size
     val cols = input[0].length
     val xmasWordCount = countXmasWord(input, rows, cols)
     val xmasCount = countXmas(input, rows, cols)
-    return Pair(xmasWordCount, xmasCount)
+    return Solution(xmasWordCount, xmasCount)
 }
 
 private const val word = "XMAS"

@@ -1,6 +1,6 @@
 import kotlin.math.max
 
-fun solveDay5(input: List<String>): Pair<Int, Int> {
+fun solveDay5(input: List<String>): Solution {
     val separatorIndex = input.indexOf("")
     val rules = input.take(separatorIndex)
         .map { it.split("|") }
@@ -18,7 +18,7 @@ fun solveDay5(input: List<String>): Pair<Int, Int> {
         .map { it.mapToInt() }
     val validUpdateSum = validateUpdates(precedenceTable, updates)
     val correctedUpdateSum = correctUpdates(precedenceTable, updates)
-    return Pair(validUpdateSum, correctedUpdateSum)
+    return Solution(validUpdateSum, correctedUpdateSum)
 }
 
 private fun validateUpdates(precedenceTable: List<IntArray>, updates: List<List<Int>>): Int {

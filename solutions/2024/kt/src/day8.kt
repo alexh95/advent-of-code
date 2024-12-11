@@ -1,5 +1,4 @@
-fun solveDay8(input: List<String>): Pair<Int, Int> {
-    val uniqueAntennas = input.flatMap { it.toList().filter { c -> c != '.' } }.toSet()
+fun solveDay8(input: List<String>): Solution {
     val antennaToPositions = input.flatMapIndexed { r, line ->
         line.mapIndexed { c, char -> Pair(char, Vec2i(c, r)) }
             .filter { it.first != '.' }
@@ -8,7 +7,7 @@ fun solveDay8(input: List<String>): Pair<Int, Int> {
     val maxX = input[0].length
     val uniqueAntinodes = countAntinodes(antennaToPositions, maxX, maxY)
     val uniqueAllAntinodes = countAllAntinodes(antennaToPositions, maxX, maxY)
-    return Pair(uniqueAntinodes, uniqueAllAntinodes)
+    return Solution(uniqueAntinodes, uniqueAllAntinodes)
 }
 
 private fun countAntinodes(antennaToPositions: Map<Char, List<Vec2i>>, maxX: Int, maxY: Int): Int {

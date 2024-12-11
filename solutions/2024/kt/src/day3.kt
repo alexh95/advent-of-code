@@ -1,8 +1,8 @@
-fun solveDay3(input: List<String>): Pair<Int, Int> {
+fun solveDay3(input: List<String>): Solution {
     val text = input.joinToString("")
     val mulSum = detectMulAndSum(text)
     val activeMulSum = activeMulAndSum(text)
-    return Pair(mulSum, activeMulSum)
+    return Solution(mulSum, activeMulSum)
 }
 
 private fun detectMulAndSum(text: String): Int {

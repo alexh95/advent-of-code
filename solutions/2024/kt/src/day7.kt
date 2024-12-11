@@ -1,4 +1,4 @@
-fun solveDay7(input: List<String>): Pair<Long, Long> {
+fun solveDay7(input: List<String>): Solution {
     val expressions = input.map { Expression(it) }
     val solvableExpression2Count = expressions
         .filter { expressionIsSolvable2(it) }
@@ -6,7 +6,7 @@ fun solveDay7(input: List<String>): Pair<Long, Long> {
     val solvableExpression3Count = expressions
         .filter { expressionIsSolvable3(it) }
         .sumOf { it.result }
-    return Pair(solvableExpression2Count, solvableExpression3Count)
+    return Solution(solvableExpression2Count, solvableExpression3Count)
 }
 
 private fun expressionIsSolvable2(expression: Expression): Boolean {

@@ -7,9 +7,9 @@ fun main() {
     writeOutput(day, solution)
 }
 
-fun solve(day: Int): Pair<Number, Number> = solve(day, getInput(day))
+fun solve(day: Int): Solution = solve(day, getInput(day))
 
-fun solve(day: Int, input: List<String>): Pair<Number, Number> {
+fun solve(day: Int, input: List<String>): Solution {
     return when (day) {
         1 -> solveDay1(input)
         2 -> solveDay2(input)

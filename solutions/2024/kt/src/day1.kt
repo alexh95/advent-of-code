@@ -1,12 +1,12 @@
 import kotlin.math.abs
 
-fun solveDay1(input: List<String>): Pair<Int, Int> {
+fun solveDay1(input: List<String>): Solution {
     val pairs = input.map { it.split("   ") }
     val left = pairs.map { it[0].toInt() }.sorted()
     val right = pairs.map { it[1].toInt() }.sorted()
     val distanceSum = orderedDistanceSum(left, right)
     val similarityScore = computeSimilarityScore(left, right)
-    return Pair(distanceSum, similarityScore)
+    return Solution(distanceSum, similarityScore)
 }
 
 private fun orderedDistanceSum(left: List<Int>, right: List<Int>): Int {

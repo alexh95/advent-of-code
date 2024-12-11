@@ -1,4 +1,4 @@
-fun solveDay6(input: List<String>): Pair<Int, Int> {
+fun solveDay6(input: List<String>): Solution {
     val maxY = input.size
     val maxX = input[0].length
     val startingPosition = input
@@ -8,7 +8,7 @@ fun solveDay6(input: List<String>): Pair<Int, Int> {
     val uniquePositions = simulateUniquePositions(input, maxX, maxY, startingPosition)
     val tilesCovered = uniquePositions.size
     val loopingBlockCount = blockGuard(input, maxX, maxY, startingPosition, uniquePositions)
-    return Pair(tilesCovered, loopingBlockCount)
+    return Solution(tilesCovered, loopingBlockCount)
 }
 
 private val directions = listOf(
