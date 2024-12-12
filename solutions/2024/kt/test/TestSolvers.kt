@@ -2,12 +2,15 @@ fun main() {
     var notFailed = true
     for (day in (1..daysGone)) {
         print("Testing day $day ")
+        val timeBefore = System.currentTimeMillis()
         if (testSolver(day)) {
-            println("✅")
+            print("✅")
         } else {
-            println("❌")
+            print("❌")
             notFailed = false
         }
+        val timeAfter = System.currentTimeMillis()
+        println(" in ${timeAfter - timeBefore}ms")
     }
     if (notFailed) {
         println("All tests passed successfully")
