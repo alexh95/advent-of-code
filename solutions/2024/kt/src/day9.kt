@@ -42,37 +42,36 @@ private fun compressDiskMap(sectors: List<Pair<Int, Int>>): Long {
 
 private fun defragDiskMap(sectors: List<Pair<Int,Int>>): Long {
     val diskMap = expandMap(sectors)
-    val moved = mutableSetOf(-1)
-    var firstEmptySectorIndex = diskMap.indexOf(-1)
-    var leftIndex = firstEmptySectorIndex
-    var rightIndex = diskMap.lastIndex
-    while (diskMap.indexOf(-1) < rightIndex) {
-        if (diskMap[leftIndex] > -1) {
-            ++leftIndex
-        } else if (diskMap[rightIndex] == -1 || moved.contains(diskMap[rightIndex])) {
-            --rightIndex
-        } else if (leftIndex >= rightIndex) {
-            leftIndex = diskMap.indexOf(-1)
-            val currentId = diskMap[rightIndex]
-            val currentFileSize = sectors[2 * currentId].second
-            rightIndex -= currentFileSize
-        } else {
-            val emptySectorSize = diskMap.drop(leftIndex).indexOfFirst { it > -1 }
-            val currentId = diskMap[rightIndex]
-            val currentFileSize = sectors[2 * currentId].second
+    val fileIdToDiskMap = mutableListOf<Pair<Int, Int>>()
+    val freeSectors = mutableListOf<IntArray>()
+    val lastId = sectors.last().first
 
-            if (emptySectorSize >= currentFileSize && !moved.contains(currentId)) {
-                moved += currentId
-                for (i in 0 until currentFileSize) {
-                    diskMap[leftIndex++] = diskMap[rightIndex]
-                    diskMap[rightIndex--] = -1
+    var currentIndex = 0
+    sectors.forEach { (id, size) ->
+        if (id > -1) {
+            fileIdToDiskMap += Pair(currentIndex, size)
+        } else if (size > 0) {
+            freeSectors += listOf(currentIndex, size).toIntArray()
+        }
+        currentIndex += size
+    }
+
+    for (fileId in lastId downTo 0) {
+        val file = fileIdToDiskMap[fileId]
+        val firstFreeSectorIndex = freeSectors.indexOfFirst { it[1] >= file.second }
+        if (firstFreeSectorIndex > -1) {
+            val firstFreeSector = freeSectors[firstFreeSectorIndex]
+            if (firstFreeSector[0] < file.first) {
+                for (index in 0 until file.second) {
+                    diskMap[index + firstFreeSector[0]] = fileId
+                    diskMap[index + file.first] = -1
                 }
-                leftIndex = diskMap.indexOf(-1)
-            } else {
-                leftIndex += emptySectorSize
+                freeSectors[firstFreeSectorIndex][0] += file.second
+                freeSectors[firstFreeSectorIndex][1] -= file.second
             }
         }
     }
+
     return diskMapChecksum(diskMap)
 }
 
