@@ -1,5 +1,4 @@
 fun solveDay9(input: List<String>): Solution {
-//    val input = listOf("2333133121414131402")
     val compactDiskMap = input[0]
     val sectors = calculateSectorData(compactDiskMap)
     val checksum = compressDiskMap(sectors)
