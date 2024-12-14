@@ -1,4 +1,4 @@
-const val daysGone = 10
+const val daysGone = 11
 
 fun main() {
     val day = daysGone
@@ -21,6 +21,7 @@ fun solve(day: Int, input: List<String>): Solution {
         8 -> solveDay8(input)
         9 -> solveDay9(input)
         10 -> solveDay10(input)
+        11 -> solveDay11(input)
         else -> Pair(0, 0)
     }
 }

@@ -20,6 +20,10 @@ fun List<String>.mapToInt(): List<Int> {
     return map { it.toInt() }
 }
 
+fun List<String>.mapToLong(): List<Long> {
+    return map { it.toLong() }
+}
+
 fun <T> List<T>.toPair(): Pair<T, T> {
     return Pair(this[0], this[1])
 }
