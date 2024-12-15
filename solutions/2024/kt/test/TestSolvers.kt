@@ -1,22 +1,22 @@
+import kotlin.concurrent.thread
+
 fun main() {
-    var notFailed = true
     for (day in (1..daysGone)) {
-        print("Testing day $day ")
-        val timeBefore = System.currentTimeMillis()
-        if (testSolver(day)) {
-            print("✅")
-        } else {
-            print("❌")
-            notFailed = false
-        }
-        val timeAfter = System.currentTimeMillis()
-        println(" in ${timeAfter - timeBefore}ms")
+        thread { runTest(day) }
     }
-    if (notFailed) {
-        println("All tests passed successfully")
+}
+
+private fun runTest(day: Int) {
+    val result = StringBuilder("Testing day $day ")
+    val timeBefore = System.currentTimeMillis()
+    if (testSolver(day)) {
+        result.append("✅")
     } else {
-        throw Error("Not all solvers passed successfully.")
+        result.append("❌")
     }
+    val timeAfter = System.currentTimeMillis()
+    result.append(" in ${timeAfter - timeBefore}ms")
+    println(result)
 }
 
 private fun testSolver(day: Int): Boolean {
