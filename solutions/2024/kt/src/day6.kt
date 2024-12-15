@@ -4,7 +4,7 @@ fun solveDay6(input: List<String>): Solution {
     val startingPosition = input
         .mapIndexed { index, line -> Pair(line.indexOf("^"), index) }
         .filter { it.first > -1 }
-        .toVec2i()
+        .pairToVec2i()
     val uniquePositions = simulateUniquePositions(input, maxX, maxY, startingPosition)
     val tilesCovered = uniquePositions.size
     val loopingBlockCount = blockGuard(input, maxX, maxY, startingPosition, uniquePositions)
